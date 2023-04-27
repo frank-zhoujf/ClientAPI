@@ -4,10 +4,10 @@ namespace ClientAPI.Services
 {
     public interface IClientService
     {
-        public IEnumerable<Client> GetClientList();
-        public Client GetClientById(int id);
-        public Client AddClient(Client client);
-        public Client UpdateClient(Client client);
-        public bool DeleteClient(int Id);
+        public Task<IEnumerable<Client>> GetClientListAsync();
+        public Task<Client> GetClientByIdAsync(int id);
+        public Task<Client> AddClientAsync(Client client);
+        public Task<Client> UpdateClientAsync(Client client);
+        public Task<bool> DeleteClientAsync(int Id);
     }
 }

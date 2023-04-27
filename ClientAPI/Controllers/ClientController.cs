@@ -1,7 +1,6 @@
 ﻿using ClientAPI.Models;
 using ClientAPI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace ClientAPI.Controllers
 {
@@ -16,34 +15,34 @@ namespace ClientAPI.Controllers
         }
 
         [HttpGet("clientlist")]
-        public IEnumerable<Client> ClientList()
+        public async Task<IEnumerable<Client>> ClientListAsync()
         {
-            var clientList = clientService.GetClientList();
+            var clientList = await clientService.GetClientListAsync();
             return clientList;
         }
 
         [HttpGet("getclientbyid")]
-        public Client GetClientById(int Id)
+        public async Task<Client> GetClientByIdAsync(int Id)
         {
-            return clientService.GetClientById(Id);
+            return await clientService.GetClientByIdAsync(Id);
         }
 
         [HttpPost("addclient")]
-        public Client AddClient(Client client)
+        public async Task<Client> AddClientAsync(Client client)
         {
-            return clientService.AddClient(client);
+            return await clientService.AddClientAsync(client);
         }
 
         [HttpPut("updateclient")]
-        public Client UpdateClient(Client client)
+        public async Task<Client> UpdateClientAsync(Client client)
         {
-            return clientService.UpdateClient(client);
+            return await clientService.UpdateClientAsync(client);
         }
 
         [HttpDelete("deleteclient")]
-        public bool DeleteClient(int Id)
+        public async Task<bool> DeleteClientAsync(int Id)
         {
-            return clientService.DeleteClient(Id);
+            return await clientService.DeleteClientAsync(Id);
         }
     }
 }
