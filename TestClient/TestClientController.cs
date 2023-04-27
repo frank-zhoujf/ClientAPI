@@ -14,15 +14,15 @@ namespace TestClient
         }
 
         [Fact]
-        public void GetClientList_ClientList()
+        public async Task GetClientList_ClientList()
         {
             //arrange
-            var clientList = GetClientsData();
-            clientService.Setup(x => x.GetClientList()).Returns(clientList);
+            var clientList = GetClientsData().AsEnumerable();
+            clientService.Setup(x => x.GetClientListAsync()).Returns(Task.FromResult(clientList));
             var clientController = new ClientController(clientService.Object);
 
             //act
-            var clientResult = clientController.ClientList();
+            var clientResult = await clientController.ClientListAsync();
 
             //assert
             Assert.NotNull(clientResult);
@@ -32,15 +32,15 @@ namespace TestClient
         }
 
         [Fact]
-        public void GetClientByID_Client()
+        public async Task GetClientByID_Client()
         {
             //arrange
             var clientList = GetClientsData();
-            clientService.Setup(x => x.GetClientById(2)).Returns(clientList[1]);
+            clientService.Setup(x => x.GetClientByIdAsync(2)).Returns(Task.FromResult(clientList[1]));
             var clientController = new ClientController(clientService.Object);
 
             //act
-            var clientResult = clientController.GetClientById(2);
+            var clientResult = await clientController.GetClientByIdAsync(2);
 
             //assert
             Assert.NotNull(clientResult);
@@ -50,15 +50,15 @@ namespace TestClient
 
         [Theory]
         [InlineData("Jake Bream")]
-        public void CheckClientExistOrNotByClientName_Client(string clientName)
+        public async void CheckClientExistOrNotByClientName_Client(string clientName)
         {
             //arrange
-            var clientList = GetClientsData();
-            clientService.Setup(x => x.GetClientList()).Returns(clientList);
+            var clientList = GetClientsData().AsEnumerable();
+            var result = clientService.Setup(x => x.GetClientListAsync()).Returns(Task.FromResult(clientList));
             var clientController = new ClientController(clientService.Object);
 
             //act
-            var clientResult = clientController.ClientList();
+            var clientResult = await clientController.ClientListAsync();
             var expectedClientName = clientResult.ToList()[0].ClientName;
 
             //assert
@@ -66,15 +66,15 @@ namespace TestClient
         }
 
         [Fact]
-        public void AddClient_Client()
+        public async Task AddClient_Client()
         {
             //arrange
             var clientList = GetClientsData();
-            clientService.Setup(x => x.AddClient(clientList[2])).Returns(clientList[2]);
+            clientService.Setup(x => x.AddClientAsync(clientList[2])).Returns(Task.FromResult(clientList[2]));
             var clientController = new ClientController(clientService.Object);
 
             //act
-            var clientResult = clientController.AddClient(clientList[2]);
+            var clientResult = await clientController.AddClientAsync(clientList[2]);
 
             //assert
             Assert.NotNull(clientResult);

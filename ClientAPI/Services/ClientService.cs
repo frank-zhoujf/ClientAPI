@@ -1,5 +1,6 @@
 ﻿using ClientAPI.Data;
 using ClientAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClientAPI.Services
 {
@@ -12,35 +13,35 @@ namespace ClientAPI.Services
             _dbContext = dbContext;
         }
 
-        public Client AddClient(Client client)
+        public async Task<Client> AddClientAsync(Client client)
         {
-            var result = _dbContext.Clients.Add(client);
-            _dbContext.SaveChanges();
+            var result = await _dbContext.Clients.AddAsync(client);
+            await _dbContext.SaveChangesAsync();
             return result.Entity;
         }
 
-        public bool DeleteClient(int Id)
+        public async Task<bool> DeleteClientAsync(int Id)
         {
             var client = _dbContext.Clients.Where(x => x.ClientId == Id).FirstOrDefault();
             var result = _dbContext.Remove(client);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
             return result != null;
         }
 
-        public Client GetClientById(int id)
+        public async Task<Client> GetClientByIdAsync(int id)
         {
-            return _dbContext.Clients.Where(x => x.ClientId == id).FirstOrDefault();
+            return await Task.FromResult(_dbContext.Clients.Where(x => x.ClientId == id).FirstOrDefault());
         }
 
-        public IEnumerable<Client> GetClientList()
+        public async Task<IEnumerable<Client>> GetClientListAsync()
         {
-            return _dbContext.Clients.ToList();
+            return await _dbContext.Clients.ToListAsync();
         }
 
-        public Client UpdateClient(Client client)
+        public async Task<Client> UpdateClientAsync(Client client)
         {
             var result = _dbContext.Clients.Update(client);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
             return result.Entity;
         }
     }
